@@ -4,7 +4,7 @@ num_epochs: 5
 batch_size: 10
 clients_per_round: 2
 fraction_fit: 0.1
-learning_rate: 1e-4
+learning_rate: 1e-3
 num_rounds: 10
 partitioning: "imbalance_label"
 dataset_name: "chest_xray"
