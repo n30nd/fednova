@@ -1,5 +1,5 @@
 import torch
-from model import ResNet18, VGG11Model
+from model import ResNet18, ResNet50, VGG11Model
 import torch.optim as optim 
 import copy
 import random 
@@ -8,13 +8,15 @@ import time
 import matplotlib.pyplot as plt
 
 def federated_train(trainloaders, valloaders, testloader, config):
-    # model = ResNet18(num_classes=2)
     model = ResNet18(num_classes=2)
+    # model = ResNet50(num_classes=2)
+    # model = VGG11Model(num_classes=2)
     global_model = copy.deepcopy(model)  # Bản sao mô hình toàn cục
         
     num_rounds = config.num_rounds  # Số vòng huấn luyện
     accs = []
 
+    accs.append(evaluate(global_model, testloader)) #huan luyen 1 lan trc o server
     for round_num in range(num_rounds):
         print(f"Round {round_num + 1}/{num_rounds}")
         start = time.time()
@@ -64,13 +66,21 @@ def federated_train(trainloaders, valloaders, testloader, config):
         # global_model = fednova_update(global_model, len_data_local_select, local_deltas, taus)
         
         # Đánh giá mô hình trên tập kiểm tra
-        accs.append(evaluate(global_model, testloader))
+        acc = evaluate(global_model, testloader)
+        accs.append(acc)
+        # Điều chỉnh learning rate theo độ chính xác
+        if acc > 70.0:
+            config.learning_rate = 1e-5
+            print(f"Accuracy > 80%, decreasing learning rate to {config.learning_rate}")
+        elif acc > 65.0:
+            config.learning_rate = 1e-4
+            print(f"Accuracy > 70%, decreasing learning rate to {config.learning_rate}")
         end = time.time()
         print(f'Time for round {round_num + 1}: ', end-start)
     print('accuracies: ', accs)
-    plt.plot(range(1, num_rounds + 1), accs, marker='o', label='Accuracy')
+    plt.plot(range(0, num_rounds + 1), accs, marker='o', label='Accuracy')
     plt.xlabel('Round')
-    plt.xticks(range(1, num_rounds + 1))
+    plt.xticks(range(0, num_rounds + 1, 10))
     plt.ylabel('Accuracy')
     plt.title('FedNova on ResNet18 over Rounds')
     plt.grid(True)
@@ -101,7 +111,7 @@ def local_train(client, global_model, config, trainloader):
         lr=config.learning_rate, 
         momentum=config.momentum)
     tau = 0
-    print(f"Training on client {client}, device: {device}")
+    print(f"Training on client {client}, device: {device}, learning_rate={config.learning_rate}")
     # Huấn luyện mô hình trên client
     for epoch in range(config.num_epochs):
         for batch_idx, (data, target) in enumerate(trainloader[client]):

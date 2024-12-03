@@ -19,7 +19,7 @@ import matplotlib
 matplotlib.use('Agg')  # Chuyển sang backend không cần GUI
 
 print('BACKEND: ', matplotlib.get_backend())
-NUM_WORKERS = 10
+NUM_WORKERS = 6
 # def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
 #     """Load custom dataset and apply transformations."""
 #     transform = Compose([
@@ -62,20 +62,43 @@ NUM_WORKERS = 10
 #     trainset = ImageFolder(os.path.join(data_path, 'train'), transform=train_transform)
 #     testset = ImageFolder(os.path.join(data_path, 'test'), transform=test_transform)
 #     return trainset, testset
-def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
+# def get_custom_dataset(data_path: str = "/home/namvq1/Documents/chest_xray"):
+#     """Load custom dataset and apply transformations."""
+#     train_transform = transforms.Compose([
+#         transforms.Resize((150, 150)),  # Kích thước ảnh cho VGG
+#         transforms.RandomAffine(degrees=0, shear=10),
+#         transforms.RandomHorizontalFlip(),
+#         transforms.RandomResizedCrop(150, scale=(0.8, 1.0)),
+#         transforms.RandomAffine(degrees=0, translate=(0.2, 0)),
+#         transforms.ToTensor(),
+#         transforms.Normalize([0.485, 0.456, 0.406],  # Mean chuẩn của ImageNet
+#                              [0.229, 0.224, 0.225])  # Std chuẩn của ImageNet
+#     ])
+#     test_transform = transforms.Compose([
+#         transforms.Resize((150, 150)),  # Kích thước ảnh cho VGG
+#         transforms.ToTensor(),
+#         transforms.Normalize([0.485, 0.456, 0.406],  # Mean chuẩn của ImageNet
+#                              [0.229, 0.224, 0.225])  # Std chuẩn của ImageNet
+#     ])
+#     trainset = ImageFolder(os.path.join(data_path, 'train'), transform=train_transform)
+#     testset = ImageFolder(os.path.join(data_path, 'test'), transform=test_transform)
+#     return trainset, testset
+
+def get_custom_dataset(data_path: str = "/home/namvq1/Documents/chest_xray"):
+    #For resnet 
     """Load custom dataset and apply transformations."""
     train_transform = transforms.Compose([
-        transforms.Resize((150, 150)),  # Kích thước ảnh cho VGG
+        transforms.Resize(256),  # Kích thước ảnh cho Resnet
         transforms.RandomAffine(degrees=0, shear=10),
         transforms.RandomHorizontalFlip(),
-        transforms.RandomResizedCrop(150, scale=(0.8, 1.0)),
+        transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
         transforms.RandomAffine(degrees=0, translate=(0.2, 0)),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406],  # Mean chuẩn của ImageNet
                              [0.229, 0.224, 0.225])  # Std chuẩn của ImageNet
     ])
     test_transform = transforms.Compose([
-        transforms.Resize((150, 150)),  # Kích thước ảnh cho VGG
+        transforms.Resize((224, 224)),  # Kích thước ảnh cho VGG
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406],  # Mean chuẩn của ImageNet
                              [0.229, 0.224, 0.225])  # Std chuẩn của ImageNet
@@ -83,6 +106,7 @@ def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
     trainset = ImageFolder(os.path.join(data_path, 'train'), transform=train_transform)
     testset = ImageFolder(os.path.join(data_path, 'test'), transform=test_transform)
     return trainset, testset
+
 
 
 def prepare_dataset_for_centralized_train(batch_size: int, val_ratio: float = 0.1, seed: int = 42):

@@ -1,11 +1,11 @@
 # config.yaml
 num_clients: 60
-num_epochs: 5
-batch_size: 10
+num_epochs: 3
+batch_size: 16
 clients_per_round: 2
 fraction_fit: 0.1
 learning_rate: 1e-3
-num_rounds: 10
+num_rounds: 90
 partitioning: "imbalance_label"
 dataset_name: "chest_xray"
 dataset_seed: 42
