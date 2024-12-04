@@ -116,7 +116,7 @@ def get_val_dataloader(batch_size: int = 10):
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
-    valset = ImageFolder(os.path.join("/media/namvq/Data/chest_xray", 'val'), transform=val_transform)
+    valset = ImageFolder(os.path.join("/home/namvq1/Documents/chest_xray", 'val'), transform=val_transform)
     valloader = DataLoader(valset, batch_size=batch_size, shuffle=False, num_workers=NUM_WORKERS)
     return valloader
 
