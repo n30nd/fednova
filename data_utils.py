@@ -19,7 +19,7 @@ import matplotlib
 matplotlib.use('Agg')  # Chuyển sang backend không cần GUI
 
 print('BACKEND: ', matplotlib.get_backend())
-NUM_WORKERS = 6
+NUM_WORKERS = 10
 # def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
 #     """Load custom dataset and apply transformations."""
 #     transform = Compose([
@@ -84,7 +84,9 @@ NUM_WORKERS = 6
 #     testset = ImageFolder(os.path.join(data_path, 'test'), transform=test_transform)
 #     return trainset, testset
 
-def get_custom_dataset(data_path: str = "/home/namvq1/Documents/chest_xray"):
+# /home/namvq1/Documents/chest_xray
+
+def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
     #For resnet 
     """Load custom dataset and apply transformations."""
     train_transform = transforms.Compose([
@@ -107,7 +109,16 @@ def get_custom_dataset(data_path: str = "/home/namvq1/Documents/chest_xray"):
     testset = ImageFolder(os.path.join(data_path, 'test'), transform=test_transform)
     return trainset, testset
 
-
+#Lay tap val goc co 16 anh thoi
+def get_val_dataloader(batch_size: int = 10):
+    val_transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    valset = ImageFolder(os.path.join("/media/namvq/Data/chest_xray", 'val'), transform=val_transform)
+    valloader = DataLoader(valset, batch_size=batch_size, shuffle=False, num_workers=NUM_WORKERS)
+    return valloader
 
 def prepare_dataset_for_centralized_train(batch_size: int, val_ratio: float = 0.1, seed: int = 42):
     trainset, testset = get_custom_dataset()
