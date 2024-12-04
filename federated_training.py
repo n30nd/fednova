@@ -176,7 +176,10 @@ def federated_train(trainloaders, valloaders, testloader, config):
 
 
         if round_num >= 3:
-            if acc_val > 70.0:
+            if acc_val > 80.0:
+                config.learning_rate = 1e-7
+                print(f"Accuracy > 80%, decreasing learning rate to {config.learning_rate}")
+            elif acc_val > 70.0:
                 config.learning_rate = 1e-6
                 print(f"Accuracy > 70%, decreasing learning rate to {config.learning_rate}")
             elif acc_val > 60.0:
