@@ -174,12 +174,17 @@ def federated_train(trainloaders, valloaders, testloader, config):
         accs_val.append(acc_val)
         print(f"Accuracy on validation set: {acc_val}")
 
-        if acc_test > 70.0:
-            config.learning_rate = 1e-5
-            print(f"Accuracy > 70%, decreasing learning rate to {config.learning_rate}")
-        elif acc_test > 65.0:
-            config.learning_rate = 1e-4
-            print(f"Accuracy > 65%, decreasing learning rate to {config.learning_rate}")
+
+        if round_num >= 3:
+            if acc_val > 70.0:
+                config.learning_rate = 1e-6
+                print(f"Accuracy > 70%, decreasing learning rate to {config.learning_rate}")
+            if acc_val > 60.0:
+                config.learning_rate = 1e-5
+                print(f"Accuracy > 60%, decreasing learning rate to {config.learning_rate}")
+            elif acc_val > 50.0:
+                config.learning_rate = 1e-4
+                print(f"Accuracy > 50%, decreasing learning rate to {config.learning_rate}")
         end = time.time()
         print(f'Time for round {round_num + 1}: ', end-start)
     print('accuracies test: ', accs_test)
