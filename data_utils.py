@@ -86,7 +86,7 @@ NUM_WORKERS = 10
 
 # /home/namvq1/Documents/chest_xray
 
-def get_custom_dataset(data_path: str = "/media/namvq/Data/chest_xray"):
+def get_custom_dataset(data_path: str = "/home/namvq1/Documents/chest_xray"):
     #For resnet 
     """Load custom dataset and apply transformations."""
     train_transform = transforms.Compose([
