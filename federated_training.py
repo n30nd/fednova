@@ -111,6 +111,17 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def federated_train(trainloaders, valloaders, testloader, config):
     # model = ResNet18(num_classes=2)
     # model = ResNet50(num_classes=2)
+
+    #Cai dat seed
+    random.seed(config.dataset_seed)
+    np.random.seed(config.dataset_seed)
+    torch.manual_seed(config.dataset_seed)
+    torch.cuda.manual_seed(config.dataset_seed)
+    torch.cuda.manual_seed_all(config.dataset_seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+
     model = VGG11Model(num_classes=2)
     global_model = copy.deepcopy(model)  # Bản sao mô hình toàn cục
     valloader_goc = get_val_dataloader()
