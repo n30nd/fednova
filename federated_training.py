@@ -185,6 +185,9 @@ def federated_train(trainloaders, valloaders, testloader, config):
             elif acc_val > 50.0:
                 config.learning_rate = 1e-4
                 print(f"Accuracy > 50%, decreasing learning rate to {config.learning_rate}")
+            else :
+                config.learning_rate = 1e-3
+                print(f"Accuracy <= 50%, increasing learning rate to {config.learning_rate}")
         end = time.time()
         print(f'Time for round {round_num + 1}: ', end-start)
     print('accuracies test: ', accs_test)
